@@ -3,4 +3,8 @@
     <string name="final_status">Final</string>
     <string name="mavericks">Mavericks</string>
     <string name="pacers">Pacers</string>
+    <string name="calendar_content_description">Calendar</string>
+    <string name="chevron_left_content_description">Chevron Left</string>
+    <string name="chevron_right_content_description">Chevron Right</string>
+    <string name="nba">NBA</string>
 </resources>

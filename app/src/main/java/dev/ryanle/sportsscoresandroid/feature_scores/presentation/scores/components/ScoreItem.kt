@@ -2,7 +2,6 @@ package dev.ryanle.sportsscoresandroid.feature_scores.presentation.scores.compon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -24,18 +23,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dev.ryanle.sportsscoresandroid.R
-import dev.ryanle.sportsscoresandroid.feature_scores.domain.model.Game
+import dev.ryanle.sportsscoresandroid.feature_scores.domain.Score
+import dev.ryanle.sportsscoresandroid.util.DateUtil.DATE_TIME_FORMAT_PATTERN_2
+import dev.ryanle.sportsscoresandroid.util.DateUtil.DATE_TIME_FORMAT_PATTERN_3
+import dev.ryanle.sportsscoresandroid.util.DateUtil.DATE_TIME_FORMAT_PATTERN_4
+import dev.ryanle.sportsscoresandroid.util.DateUtil.calculateDaysFromCurrentDay
+import dev.ryanle.sportsscoresandroid.util.DateUtil.convertToLocalDateTime
+import dev.ryanle.sportsscoresandroid.util.formatDateTime
 
 @Composable
 fun ScoreItem(
-    game: Game,
+    score: Score,
     modifier: Modifier = Modifier
 ) {
     var winningTeam = ""
 
-    game.homeTeamScore?.let { homeScore ->
-        game.awayTeamScore?.let { awayScore ->
+    score.homeTeamScore?.let { homeScore ->
+        score.awayTeamScore?.let { awayScore ->
             winningTeam = if (homeScore > awayScore) {
                 "home"
             } else {
@@ -58,27 +64,32 @@ fun ScoreItem(
                     FontWeight.Normal
                 }
 
-                Image(
-                    painter = painterResource(R.drawable.indiana_pacers_logo),
-                    contentDescription = "Indiana Pacers Logo",
-                    modifier = Modifier.size(32.dp)
-                )
+                score.awayTeam.drawableResId?.let { resId ->
+                    Image(
+                        painter = painterResource(resId),
+                        contentDescription = "",
+                        modifier = Modifier.size(32.dp)
+                    )
+                } ?: LogoPlaceHolder()
+
                 Text(
-                    text = game.awayTeam,
+                    text = score.awayTeam.teamName,
                     modifier = Modifier
                         .padding(start = 4.dp),
                     fontWeight = fontWeight
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = game.awayTeamScore.toString(), fontWeight = fontWeight)
+                Text(text = score.awayTeamScore?.toString() ?: "", fontWeight = fontWeight)
+
                 if (winningTeam.lowercase() == "away") {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_left_24),
                         contentDescription = "Arrow Left",
                     )
+                } else {
+                    Spacer(modifier = Modifier.width(24.dp))
                 }
             }
-            Spacer(modifier = Modifier.height(0.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val fontWeight = if (winningTeam.lowercase() == "home") {
                     FontWeight.Bold
@@ -86,18 +97,22 @@ fun ScoreItem(
                     FontWeight.Normal
                 }
 
-                Image(
-                    painter = painterResource(R.drawable.dallas_mavericks_logo),
-                    contentDescription = "Dallas Mavericks Logo",
-                    modifier = Modifier.size(32.dp)
-                )
+                score.homeTeam.drawableResId?.let { resId ->
+                    Image(
+                        painter = painterResource(resId),
+                        contentDescription = "",
+                        modifier = Modifier.size(32.dp)
+                    )
+                } ?: LogoPlaceHolder()
+
                 Text(
-                    text = game.homeTeam,
+                    text = score.homeTeam.teamName,
                     modifier = Modifier.padding(start = 4.dp),
                     fontWeight = fontWeight
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = game.homeTeamScore.toString(), fontWeight = fontWeight)
+                Text(text = score.homeTeamScore?.toString() ?: "", fontWeight = fontWeight)
+
                 if (winningTeam.lowercase() == "home") {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_left_24),
@@ -112,22 +127,50 @@ fun ScoreItem(
         Column(
             modifier = Modifier
                 .weight(0.3f)
-                .padding(start = 8.dp),
-            verticalArrangement = Arrangement.Center
+                .padding(horizontal = 16.dp)
         ) {
+            val daysFromCurrentDate = calculateDaysFromCurrentDay(score.startsAt)
+
+            val status = if (score.started && !score.completed) {
+                "N/A"
+            } else if (score.completed) {
+                stringResource(R.string.final_status)
+            } else {
+                val startsAt = convertToLocalDateTime(score.startsAt)
+
+                when (daysFromCurrentDate) {
+                    0 -> "Today ${startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2)}"
+                    1 -> "Tomorrow\n${startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2)}"
+                    else -> {
+                        val dateDay = startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_3)
+                        val dateTime = startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_4)
+                        "$dateDay\n$dateTime"
+                    }
+                }
+            }
+
+            val fontWeight = if (score.completed) {
+                FontWeight.Bold
+            } else {
+                FontWeight.Normal
+            }
+
             Box(
                 modifier = Modifier.height(32.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.final_status),
-                    fontWeight = FontWeight.Bold
+                    text = status,
+                    fontSize = 12.sp,
+                    fontWeight = fontWeight,
+                    lineHeight = 16.sp
                 )
             }
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "IND covered +4.5, O 236.5"
-            )
         }
     }
+}
+
+@Composable
+private fun LogoPlaceHolder(modifier: Modifier = Modifier) {
+    Box(modifier.size(32.dp))
 }

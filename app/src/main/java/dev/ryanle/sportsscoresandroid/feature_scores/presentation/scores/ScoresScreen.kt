@@ -1,6 +1,7 @@
 package dev.ryanle.sportsscoresandroid.feature_scores.presentation.scores
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,10 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -22,35 +28,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.ryanle.sportsscoresandroid.R
-import dev.ryanle.sportsscoresandroid.feature_scores.domain.model.Game
+import dev.ryanle.sportsscoresandroid.feature_scores.domain.Score
 import dev.ryanle.sportsscoresandroid.feature_scores.presentation.scores.components.ScoreItem
+import dev.ryanle.sportsscoresandroid.util.DateUtil
+import dev.ryanle.sportsscoresandroid.util.formatDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScoresScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ScoresViewModel = viewModel()
 ) {
-    val games = listOf(
-        Game(
-            homeTeam = stringResource(R.string.mavericks),
-            awayTeam = stringResource(R.string.pacers),
-            homeTeamScore = 127,
-            awayTeamScore = 134
-        )
-    )
+    val state = viewModel.state
 
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "NBA", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.nba), fontWeight = FontWeight.Bold)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.White
@@ -58,54 +62,99 @@ fun ScoresScreen(
             )
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.LightGray)
-                .padding(innerPadding)
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
         ) {
-            Row(
+            LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxSize()
+                    .background(colorResource(R.color.off_white))
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_chevron_left_24),
-                    contentDescription = "Chevron Left",
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                TextButton(
-                    onClick = {
-                        // TODO
-                    }
-                ) {
-                    Text(
-                        text = "Mon, Nov 4",
-                        fontSize = 18.sp
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    painter = painterResource(R.drawable.baseline_chevron_right_24),
-                    contentDescription = "Chevron Right",
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn {
-                items(games) { score ->
-                    ScoreItem(
-                        score,
+                item {
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.White)
-                            .padding(16.dp)
-                    )
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = viewModel::fetchPreviousDay
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_chevron_left_24),
+                                contentDescription = stringResource(R.string.chevron_left_content_description),
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        TextButton(
+                            onClick = {
+                                // TODO
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.outline_calendar_today_24),
+                                contentDescription = stringResource(R.string.calendar_content_description),
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = state.scoresDate.formatDateTime(DateUtil.DATE_TIME_FORMAT_PATTERN_1),
+                                fontSize = 18.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        IconButton(
+                            onClick = viewModel::fetchNextDay
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_chevron_right_24),
+                                contentDescription = stringResource(R.string.chevron_right_content_description),
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
+
+                if (!state.isLoading) {
+                    state.scoresList?.let { scores ->
+                        scoresSuccessItem(scores)
+                    }
+                }
+
+            }
+
+            if (state.isLoading) {
+                CircularProgressIndicator()
             }
         }
+    }
+}
+
+fun LazyListScope.scoresSuccessItem(
+    scores: List<Score>
+) {
+    itemsIndexed(scores) { index, score ->
+        Column(modifier = Modifier.background(Color.White)) {
+            ScoreItem(
+                score,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+
+            if (index < scores.lastIndex) {
+                HorizontalDivider()
+            }
+        }
+    }
+
+    item {
+        Spacer(modifier = Modifier.height(48.dp))
     }
 }
