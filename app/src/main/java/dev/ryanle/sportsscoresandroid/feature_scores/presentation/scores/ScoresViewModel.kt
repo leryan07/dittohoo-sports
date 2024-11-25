@@ -11,7 +11,7 @@ import dev.ryanle.sportsscoresandroid.feature_scores.data.ScoresRepository.Compa
 import dev.ryanle.sportsscoresandroid.util.DateUtil
 import dev.ryanle.sportsscoresandroid.util.Result
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -43,6 +43,14 @@ class ScoresViewModel @Inject constructor(
     fun fetchPreviousDay() {
         val prevDay = state.scoresDate.minusDays(1)
         fetchScores(prevDay)
+    }
+
+    fun onSelectedDate(selectedDateMillis: Long) {
+        val utcDate = Instant.ofEpochMilli(selectedDateMillis).atZone(ZoneId.of("UTC")).toLocalDate()
+
+        // Convert that LocalDate to LocalDateTime at start of day in local timezone
+        val localDateTime = utcDate.atStartOfDay(ZoneId.systemDefault()).toLocalDateTime()
+        fetchScores(localDateTime)
     }
 
     private fun fetchScores(date: LocalDateTime) {

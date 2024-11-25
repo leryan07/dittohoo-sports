@@ -25,6 +25,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,9 +41,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.ryanle.sportsscoresandroid.R
 import dev.ryanle.sportsscoresandroid.feature_scores.domain.Score
+import dev.ryanle.sportsscoresandroid.feature_scores.presentation.scores.components.DatePickerModal
 import dev.ryanle.sportsscoresandroid.feature_scores.presentation.scores.components.ScoreItem
 import dev.ryanle.sportsscoresandroid.util.DateUtil
 import dev.ryanle.sportsscoresandroid.util.formatDateTime
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,6 +54,22 @@ fun ScoresScreen(
     viewModel: ScoresViewModel = viewModel()
 ) {
     val state = viewModel.state
+    var showDatePicker by remember {
+        mutableStateOf(false)
+    }
+
+    if (showDatePicker) {
+        DatePickerModal(
+            onDateSelected = { date ->
+                date?.let { viewModel.onSelectedDate(it) }
+            },
+            onDismiss = {
+                showDatePicker = false
+            },
+            selectedDate = state.scoresDate.atZone(ZoneId.systemDefault()).toInstant()
+                .toEpochMilli()
+        )
+    }
 
     Scaffold(
         modifier = modifier,
@@ -93,7 +115,7 @@ fun ScoresScreen(
                         Spacer(modifier = Modifier.weight(1f))
                         TextButton(
                             onClick = {
-                                // TODO
+                                showDatePicker = true
                             }
                         ) {
                             Icon(
@@ -136,7 +158,7 @@ fun ScoresScreen(
     }
 }
 
-fun LazyListScope.scoresSuccessItem(
+private fun LazyListScope.scoresSuccessItem(
     scores: List<Score>
 ) {
     itemsIndexed(scores) { index, score ->
