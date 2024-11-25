@@ -2,5 +2,5 @@ package dev.ryanle.sportsscoresandroid.feature_scores.domain
 
 interface Team {
     val drawableResId: Int?
-    val teamName: String
+    val teamNameResId: Int
 }

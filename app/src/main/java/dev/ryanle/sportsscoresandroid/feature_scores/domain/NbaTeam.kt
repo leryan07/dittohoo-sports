@@ -1,42 +1,44 @@
 package dev.ryanle.sportsscoresandroid.feature_scores.domain
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import dev.ryanle.sportsscoresandroid.R
 
 enum class NbaTeam(
-    override val drawableResId: Int?,
-    override val teamName: String
+    @DrawableRes override val drawableResId: Int?,
+    @StringRes override val teamNameResId: Int
 ) : Team {
-    CELTICS(R.drawable.boston_celtics_logo, "Celtics"),
-    NETS(R.drawable.brooklyn_nets_logo, "Nets"),
-    KNICKS(R.drawable.new_york_knicks_logo, "Knicks"),
-    SIXERS(R.drawable.philadelphia_sixers_logo, "76ers"),
-    RAPTORS(R.drawable.toronto_raptors_logo, "Raptors"),
-    BULLS(R.drawable.chicago_bulls_logo, "Bulls"),
-    CAVALIERS(R.drawable.cleveland_cavaliers_logo, "Cavaliers"),
-    PISTONS(R.drawable.detroit_pistons_logo, "Pistons"),
-    PACERS(R.drawable.indiana_pacers_logo, "Pacers"),
-    BUCKS(R.drawable.milwaukee_bucks_logo, "Bucks"),
-    NUGGETS(R.drawable.denver_nuggets_logo, "Nuggets"),
-    TIMBERWOLVES(R.drawable.minnesota_timberwolves_logo, "Timberwolves"),
-    THUNDER(R.drawable.oklahoma_city_thunder_logo, "Thunder"),
-    TRAIL_BLAZERS(R.drawable.portland_trail_blazers_logo, "Trail Blazers"),
-    WARRIORS(R.drawable.golden_state_warriors_logo, "Warriors"),
-    CLIPPERS(R.drawable.la_clippers_logo, "Clippers"),
-    LAKERS(R.drawable.la_lakers_logo, "Lakers"),
-    SUNS(R.drawable.phoenix_suns_logo, "Suns"),
-    KINGS(R.drawable.sacramento_kings_logo, "Kings"),
-    HAWKS(R.drawable.atlanta_hawks_logo, "Hawks"),
-    HORNETS(R.drawable.charlotte_hornets_logo, "Hornets"),
-    HEAT(R.drawable.miami_heat_logo, "Heat"),
-    MAGIC(R.drawable.orlando_magic_logo, "Magic"),
-    WIZARDS(R.drawable.washington_wizards_logo, "Wizards"),
-    MAVERICKS(R.drawable.dallas_mavericks_logo, "Mavericks"),
-    ROCKETS(R.drawable.houston_rockets_logo, "Rockets"),
-    GRIZZLIES(R.drawable.memphis_grizzlies_logo, "Grizzlies"),
-    PELICANS(R.drawable.new_orleans_pelicans_logo, "Pelicans"),
-    SPURS(R.drawable.san_antonio_spurs_logo, "Spurs"),
-    JAZZ(R.drawable.utah_jazz_logo, "Jazz"),
-    UNKNOWN(null, "Unknown");
+    CELTICS(R.drawable.boston_celtics_logo, R.string.celtics),
+    NETS(R.drawable.brooklyn_nets_logo, R.string.nets),
+    KNICKS(R.drawable.new_york_knicks_logo, R.string.knicks),
+    SIXERS(R.drawable.philadelphia_sixers_logo, R.string._76ers),
+    RAPTORS(R.drawable.toronto_raptors_logo, R.string.raptors),
+    BULLS(R.drawable.chicago_bulls_logo, R.string.bulls),
+    CAVALIERS(R.drawable.cleveland_cavaliers_logo, R.string.cavaliers),
+    PISTONS(R.drawable.detroit_pistons_logo, R.string.pistons),
+    PACERS(R.drawable.indiana_pacers_logo, R.string.pacers),
+    BUCKS(R.drawable.milwaukee_bucks_logo, R.string.bucks),
+    NUGGETS(R.drawable.denver_nuggets_logo, R.string.nuggets),
+    TIMBERWOLVES(R.drawable.minnesota_timberwolves_logo, R.string.timberwolves),
+    THUNDER(R.drawable.oklahoma_city_thunder_logo, R.string.thunder),
+    TRAIL_BLAZERS(R.drawable.portland_trail_blazers_logo, R.string.trail_blazers),
+    WARRIORS(R.drawable.golden_state_warriors_logo, R.string.warriors),
+    CLIPPERS(R.drawable.la_clippers_logo, R.string.clippers),
+    LAKERS(R.drawable.la_lakers_logo, R.string.lakers),
+    SUNS(R.drawable.phoenix_suns_logo, R.string.suns),
+    KINGS(R.drawable.sacramento_kings_logo, R.string.kings),
+    HAWKS(R.drawable.atlanta_hawks_logo, R.string.hawks),
+    HORNETS(R.drawable.charlotte_hornets_logo, R.string.hornets),
+    HEAT(R.drawable.miami_heat_logo, R.string.heat),
+    MAGIC(R.drawable.orlando_magic_logo, R.string.magic),
+    WIZARDS(R.drawable.washington_wizards_logo, R.string.wizards),
+    MAVERICKS(R.drawable.dallas_mavericks_logo, R.string.mavericks),
+    ROCKETS(R.drawable.houston_rockets_logo, R.string.rockets),
+    GRIZZLIES(R.drawable.memphis_grizzlies_logo, R.string.grizzlies),
+    PELICANS(R.drawable.new_orleans_pelicans_logo, R.string.pelicans),
+    SPURS(R.drawable.san_antonio_spurs_logo, R.string.spurs),
+    JAZZ(R.drawable.utah_jazz_logo, R.string.jazz),
+    UNKNOWN(null, R.string.unknown);
 
     companion object {
         fun fromValue(value: String): NbaTeam {

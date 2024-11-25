@@ -4,6 +4,7 @@ import dev.ryanle.sportsscoresandroid.feature_scores.data.mappers.toNbaScore
 import dev.ryanle.sportsscoresandroid.feature_scores.data.remote.IScoresApi
 import dev.ryanle.sportsscoresandroid.feature_scores.domain.Score
 import dev.ryanle.sportsscoresandroid.util.Result
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class ScoresRepository @Inject constructor(
@@ -16,16 +17,23 @@ class ScoresRepository @Inject constructor(
         startsBefore: String
     ): Result<List<Score>> {
         return try {
-            Result.Success(
-                data = scoresApi.getEventsData(
-                    leagueId,
-                    startsAfter,
-                    startsBefore
-                ).toNbaScore()
+            val data = scoresApi.getEventsData(
+                leagueId,
+                startsAfter,
+                startsBefore
             )
-        } catch (e: Exception) {
+
+            val dataMapped = when (leagueId) {
+                NBA_LEAGUE_ID -> data.toNbaScore()
+                else -> null
+            }
+
+            Result.Success(
+                data = dataMapped
+            )
+        } catch (e: HttpException) {
             e.printStackTrace()
-            Result.Error(e.message ?: "An unknown error occurred.")
+            Result.Error(e.message ?: "An unknown error occurred.", code = e.code())
         }
     }
 

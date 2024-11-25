@@ -73,7 +73,7 @@ fun ScoreItem(
                 } ?: LogoPlaceHolder()
 
                 Text(
-                    text = score.awayTeam.teamName,
+                    text = stringResource(score.awayTeam.teamNameResId),
                     modifier = Modifier
                         .padding(start = 4.dp),
                     fontWeight = fontWeight
@@ -84,7 +84,7 @@ fun ScoreItem(
                 if (winningTeam.lowercase() == "away") {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_left_24),
-                        contentDescription = "Arrow Left",
+                        contentDescription = stringResource(R.string.arrow_left),
                     )
                 } else {
                     Spacer(modifier = Modifier.width(24.dp))
@@ -106,7 +106,7 @@ fun ScoreItem(
                 } ?: LogoPlaceHolder()
 
                 Text(
-                    text = score.homeTeam.teamName,
+                    text = stringResource(score.homeTeam.teamNameResId),
                     modifier = Modifier.padding(start = 4.dp),
                     fontWeight = fontWeight
                 )
@@ -116,7 +116,7 @@ fun ScoreItem(
                 if (winningTeam.lowercase() == "home") {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_left_24),
-                        contentDescription = "Arrow Left"
+                        contentDescription = stringResource(R.string.arrow_left)
                     )
                 } else {
                     Spacer(modifier = Modifier.width(24.dp))
@@ -139,8 +139,14 @@ fun ScoreItem(
                 val startsAt = convertToLocalDateTime(score.startsAt)
 
                 when (daysFromCurrentDate) {
-                    0 -> "Today ${startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2)}"
-                    1 -> "Tomorrow\n${startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2)}"
+                    0 -> stringResource(
+                        R.string.today_game_date_time,
+                        startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2) ?: "N/A"
+                    )
+                    1 -> stringResource(
+                        R.string.tomorrow_game_date_time,
+                        startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2) ?: "N/A"
+                    )
                     else -> {
                         val dateDay = startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_3)
                         val dateTime = startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_4)
