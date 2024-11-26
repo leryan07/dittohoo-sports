@@ -7,5 +7,6 @@ data class ScoresState(
     val scoresDate: LocalDateTime,
     val scoresList: List<Score>? = null,
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val error: String? = null
 )

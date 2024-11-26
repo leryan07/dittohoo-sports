@@ -32,28 +32,33 @@ class ScoresViewModel @Inject constructor(
         private set
 
     init {
-        fetchScores(state.scoresDate)
+        fetchScores(state.scoresDate, isRefresh = false)
     }
 
     fun fetchNextDay() {
         val nextDay = state.scoresDate.plusDays(1)
-        fetchScores(nextDay)
+        fetchScores(nextDay, isRefresh = false)
     }
 
     fun fetchPreviousDay() {
         val prevDay = state.scoresDate.minusDays(1)
-        fetchScores(prevDay)
+        fetchScores(prevDay, isRefresh = false)
     }
 
     fun onSelectedDate(selectedDateMillis: Long) {
-        val utcDate = Instant.ofEpochMilli(selectedDateMillis).atZone(ZoneId.of("UTC")).toLocalDate()
+        val utcDate =
+            Instant.ofEpochMilli(selectedDateMillis).atZone(ZoneId.of("UTC")).toLocalDate()
 
         // Convert that LocalDate to LocalDateTime at start of day in local timezone
         val localDateTime = utcDate.atStartOfDay(ZoneId.systemDefault()).toLocalDateTime()
-        fetchScores(localDateTime)
+        fetchScores(localDateTime, isRefresh = false)
     }
 
-    private fun fetchScores(date: LocalDateTime) {
+    fun refresh() {
+        fetchScores(state.scoresDate, isRefresh = true)
+    }
+
+    private fun fetchScores(date: LocalDateTime, isRefresh: Boolean) {
         val estZone = ZoneId.of(DateUtil.NEW_YORK_TIME_ZONE_ID)
         val estDateTime = ZonedDateTime.of(date, estZone)
         val estFormattedStart = estDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
@@ -63,7 +68,8 @@ class ScoresViewModel @Inject constructor(
         viewModelScope.launch {
             state = state.copy(
                 scoresDate = date,
-                isLoading = true,
+                isLoading = !isRefresh,
+                isRefreshing = isRefresh,
                 error = null
             )
 
@@ -78,6 +84,7 @@ class ScoresViewModel @Inject constructor(
                     state.copy(
                         error = result.message,
                         isLoading = false,
+                        isRefreshing = false,
                         scoresList = null
                     )
                 }
@@ -85,7 +92,8 @@ class ScoresViewModel @Inject constructor(
                 is Result.Success -> {
                     state.copy(
                         scoresList = result.data ?: emptyList(),
-                        isLoading = false
+                        isLoading = false,
+                        isRefreshing = false
                     )
                 }
             }

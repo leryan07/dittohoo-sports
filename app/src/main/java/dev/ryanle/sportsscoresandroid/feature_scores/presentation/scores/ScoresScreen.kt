@@ -14,6 +14,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -47,13 +51,14 @@ import dev.ryanle.sportsscoresandroid.util.DateUtil
 import dev.ryanle.sportsscoresandroid.util.formatDateTime
 import java.time.ZoneId
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun ScoresScreen(
     modifier: Modifier = Modifier,
     viewModel: ScoresViewModel = viewModel()
 ) {
     val state = viewModel.state
+    val refreshState = rememberPullRefreshState(state.isRefreshing, viewModel::refresh)
     var showDatePicker by remember {
         mutableStateOf(false)
     }
@@ -87,7 +92,8 @@ fun ScoresScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .pullRefresh(refreshState),
             contentAlignment = Alignment.Center
         ) {
             LazyColumn(
@@ -154,6 +160,8 @@ fun ScoresScreen(
             if (state.isLoading) {
                 CircularProgressIndicator()
             }
+
+            PullRefreshIndicator(state.isRefreshing, refreshState, Modifier.align(Alignment.TopCenter))
         }
     }
 }
