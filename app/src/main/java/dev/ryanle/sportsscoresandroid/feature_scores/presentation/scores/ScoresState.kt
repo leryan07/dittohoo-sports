@@ -8,5 +8,7 @@ data class ScoresState(
     val scoresList: List<Score>? = null,
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
-    val error: String? = null
+    val error: ScoresError? = null
 )
+
+data class ScoresError(val message: String?, val code: Int?)

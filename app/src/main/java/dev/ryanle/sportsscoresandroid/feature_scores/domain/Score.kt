@@ -5,7 +5,5 @@ data class Score(
     val awayTeam: Team,
     val homeTeamScore: Int? = null,
     val awayTeamScore: Int? = null,
-    val startsAt: String,
-    val started: Boolean,
-    val completed: Boolean
+    val status: GameStatus
 )

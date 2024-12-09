@@ -1,16 +1,23 @@
 package dev.ryanle.sportsscoresandroid.feature_scores.presentation.scores
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -79,14 +86,46 @@ fun ScoresScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(R.string.nba), fontWeight = FontWeight.Bold)
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White
+            Column {
+                Spacer(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars))
+                AnimatedVisibility(state.error != null) {
+                    val errorMessage = if (state.error?.code == 429) {
+                        stringResource(R.string.scores_error_too_many_requests)
+                    } else {
+                        state.error?.message ?: stringResource(R.string.scores_error)
+                    }
+                    Row(
+                        modifier = Modifier
+                            .background(colorResource(R.color.off_white))
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.baseline_warning_amber_24),
+                            contentDescription = stringResource(R.string.warning),
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = errorMessage,
+                            fontSize = 14.sp
+                        )
+                    }
+                }
+                TopAppBar(
+                    modifier = Modifier.consumeWindowInsets(
+                        WindowInsets.statusBars.only(
+                            WindowInsetsSides.Top
+                        )
+                    ),
+                    title = {
+                        Text(text = stringResource(R.string.nba), fontWeight = FontWeight.Bold)
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.White
+                    )
                 )
-            )
+            }
         }
     ) { innerPadding ->
         Box(
@@ -100,6 +139,7 @@ fun ScoresScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(colorResource(R.color.off_white))
+                    .consumeWindowInsets(innerPadding)
             ) {
                 item {
                     Row(
@@ -154,14 +194,17 @@ fun ScoresScreen(
                         scoresSuccessItem(scores)
                     }
                 }
-
             }
 
             if (state.isLoading) {
                 CircularProgressIndicator()
             }
 
-            PullRefreshIndicator(state.isRefreshing, refreshState, Modifier.align(Alignment.TopCenter))
+            PullRefreshIndicator(
+                state.isRefreshing,
+                refreshState,
+                Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }

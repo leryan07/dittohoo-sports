@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.ryanle.sportsscoresandroid.R
+import dev.ryanle.sportsscoresandroid.feature_scores.domain.GameStatus
 import dev.ryanle.sportsscoresandroid.feature_scores.domain.Score
 import dev.ryanle.sportsscoresandroid.util.DateUtil.DATE_TIME_FORMAT_PATTERN_2
 import dev.ryanle.sportsscoresandroid.util.DateUtil.DATE_TIME_FORMAT_PATTERN_3
@@ -58,11 +59,12 @@ fun ScoreItem(
     ) {
         Column(modifier = Modifier.weight(0.7f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                val fontWeight = if (winningTeam.lowercase() == "away") {
-                    FontWeight.Bold
-                } else {
-                    FontWeight.Normal
-                }
+                val fontWeight =
+                    if (winningTeam.lowercase() == "away" && score.status is GameStatus.Completed) {
+                        FontWeight.Bold
+                    } else {
+                        FontWeight.Normal
+                    }
 
                 score.awayTeam.drawableResId?.let { resId ->
                     Image(
@@ -81,7 +83,7 @@ fun ScoreItem(
                 Spacer(modifier = Modifier.weight(1f))
                 Text(text = score.awayTeamScore?.toString() ?: "", fontWeight = fontWeight)
 
-                if (winningTeam.lowercase() == "away") {
+                if (winningTeam.lowercase() == "away" && score.status is GameStatus.Completed) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_left_24),
                         contentDescription = stringResource(R.string.arrow_left),
@@ -91,11 +93,12 @@ fun ScoreItem(
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                val fontWeight = if (winningTeam.lowercase() == "home") {
-                    FontWeight.Bold
-                } else {
-                    FontWeight.Normal
-                }
+                val fontWeight =
+                    if (winningTeam.lowercase() == "home" && score.status is GameStatus.Completed) {
+                        FontWeight.Bold
+                    } else {
+                        FontWeight.Normal
+                    }
 
                 score.homeTeam.drawableResId?.let { resId ->
                     Image(
@@ -113,7 +116,7 @@ fun ScoreItem(
                 Spacer(modifier = Modifier.weight(1f))
                 Text(text = score.homeTeamScore?.toString() ?: "", fontWeight = fontWeight)
 
-                if (winningTeam.lowercase() == "home") {
+                if (winningTeam.lowercase() == "home" && score.status is GameStatus.Completed) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_left_24),
                         contentDescription = stringResource(R.string.arrow_left)
@@ -129,36 +132,57 @@ fun ScoreItem(
                 .weight(0.3f)
                 .padding(horizontal = 16.dp)
         ) {
-            val daysFromCurrentDate = calculateDaysFromCurrentDay(score.startsAt)
+            val status = when (score.status) {
+                is GameStatus.Scheduled -> {
+                    val startsAt = convertToLocalDateTime(score.status.startsAt)
+                    val daysFromCurrentDate = calculateDaysFromCurrentDay(score.status.startsAt)
 
-            val status = if (score.started && !score.completed) {
-                "N/A"
-            } else if (score.completed) {
-                stringResource(R.string.final_status)
-            } else {
-                val startsAt = convertToLocalDateTime(score.startsAt)
+                    when (daysFromCurrentDate) {
+                        0 -> stringResource(
+                            R.string.today_game_date_time,
+                            startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2) ?: "N/A"
+                        )
 
-                when (daysFromCurrentDate) {
-                    0 -> stringResource(
-                        R.string.today_game_date_time,
-                        startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2) ?: "N/A"
-                    )
-                    1 -> stringResource(
-                        R.string.tomorrow_game_date_time,
-                        startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2) ?: "N/A"
-                    )
-                    else -> {
-                        val dateDay = startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_3)
-                        val dateTime = startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_4)
-                        "$dateDay\n$dateTime"
+                        1 -> stringResource(
+                            R.string.tomorrow_game_date_time,
+                            startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_2) ?: "N/A"
+                        )
+
+                        else -> {
+                            val dateDay = startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_3)
+                            val dateTime = startsAt?.formatDateTime(DATE_TIME_FORMAT_PATTERN_4)
+                            "$dateDay\n$dateTime"
+                        }
                     }
+                }
+
+                is GameStatus.Live -> {
+                    val quarter = when (score.status.currentPeriodID) {
+                        "1q" -> stringResource(R.string.q1)
+                        "2q" -> stringResource(R.string.q2)
+                        "3q" -> stringResource(R.string.q3)
+                        "4q" -> stringResource(R.string.q4)
+                        else -> ""
+                    }
+
+                    "$quarter, ${score.status.clock}"
+                }
+
+                is GameStatus.Completed -> {
+                    stringResource(R.string.final_status)
                 }
             }
 
-            val fontWeight = if (score.completed) {
+            val statusFontWeight = if (score.status is GameStatus.Completed) {
                 FontWeight.Bold
             } else {
                 FontWeight.Normal
+            }
+
+            val statusFontColor = if (score.status is GameStatus.Live) {
+                Color.Red
+            } else {
+                Color.Unspecified
             }
 
             Box(
@@ -168,8 +192,9 @@ fun ScoreItem(
                 Text(
                     text = status,
                     fontSize = 12.sp,
-                    fontWeight = fontWeight,
-                    lineHeight = 16.sp
+                    fontWeight = statusFontWeight,
+                    lineHeight = 16.sp,
+                    color = statusFontColor
                 )
             }
         }

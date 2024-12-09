@@ -5,5 +5,7 @@ data class EventStatusDto(
     val completed: Boolean,
     val finalized: Boolean,
     val startsAt: String,
-    val live: Boolean
+    val live: Boolean,
+    val clock: String?,
+    val currentPeriodID: String?
 )

@@ -69,8 +69,7 @@ class ScoresViewModel @Inject constructor(
             state = state.copy(
                 scoresDate = date,
                 isLoading = !isRefresh,
-                isRefreshing = isRefresh,
-                error = null
+                isRefreshing = isRefresh
             )
 
             val result = repository.getScoresData(
@@ -82,10 +81,10 @@ class ScoresViewModel @Inject constructor(
             state = when (result) {
                 is Result.Error -> {
                     state.copy(
-                        error = result.message,
+                        error = ScoresError(result.message, result.code),
                         isLoading = false,
                         isRefreshing = false,
-                        scoresList = null
+                        scoresList = if (isRefresh) state.scoresList else null
                     )
                 }
 
@@ -93,7 +92,8 @@ class ScoresViewModel @Inject constructor(
                     state.copy(
                         scoresList = result.data ?: emptyList(),
                         isLoading = false,
-                        isRefreshing = false
+                        isRefreshing = false,
+                        error = null
                     )
                 }
             }

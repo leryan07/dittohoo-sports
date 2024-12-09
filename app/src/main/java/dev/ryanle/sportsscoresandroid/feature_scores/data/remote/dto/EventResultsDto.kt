@@ -4,9 +4,10 @@ import com.squareup.moshi.Json
 
 data class EventResultsDto(
     @Json(name = "reg")
-    val regulation: TeamPointsDto,
+    val regulation: TeamPointsDto?,
     @Json(name = "ot")
-    val overtime: TeamPointsDto?
+    val overtime: TeamPointsDto?,
+    val game: TeamPointsDto?
 )
 
 data class TeamPointsDto(
