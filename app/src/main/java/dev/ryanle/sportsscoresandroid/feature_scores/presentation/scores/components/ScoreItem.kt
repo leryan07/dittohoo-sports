@@ -1,18 +1,18 @@
 package dev.ryanle.sportsscoresandroid.feature_scores.presentation.scores.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -53,18 +53,18 @@ fun ScoreItem(
 
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .background(Color.White)
             .height(IntrinsicSize.Min)
     ) {
         Column(modifier = Modifier.weight(0.7f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                val fontWeight =
-                    if (winningTeam.lowercase() == "away" && score.status is GameStatus.Completed) {
-                        FontWeight.Bold
-                    } else {
-                        FontWeight.Normal
-                    }
+                var awayTeamFontWeight = FontWeight.Normal
+                var awayTeamFontColor = Color.Unspecified
+
+                if (winningTeam.lowercase() == "away" && score.status is GameStatus.Completed) {
+                    awayTeamFontWeight = FontWeight.Bold
+                    awayTeamFontColor =
+                        if (isSystemInDarkTheme()) MaterialTheme.colorScheme.tertiaryContainer else Color.Unspecified
+                }
 
                 score.awayTeam.drawableResId?.let { resId ->
                     Image(
@@ -78,27 +78,35 @@ fun ScoreItem(
                     text = stringResource(score.awayTeam.teamNameResId),
                     modifier = Modifier
                         .padding(start = 4.dp),
-                    fontWeight = fontWeight
+                    fontWeight = awayTeamFontWeight,
+                    color = awayTeamFontColor
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = score.awayTeamScore?.toString() ?: "", fontWeight = fontWeight)
+                Text(
+                    text = score.awayTeamScore?.toString() ?: "",
+                    fontWeight = awayTeamFontWeight,
+                    color = awayTeamFontColor
+                )
 
                 if (winningTeam.lowercase() == "away" && score.status is GameStatus.Completed) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_left_24),
                         contentDescription = stringResource(R.string.arrow_left),
+                        tint = awayTeamFontColor
                     )
                 } else {
                     Spacer(modifier = Modifier.width(24.dp))
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                val fontWeight =
-                    if (winningTeam.lowercase() == "home" && score.status is GameStatus.Completed) {
-                        FontWeight.Bold
-                    } else {
-                        FontWeight.Normal
-                    }
+                var homeTeamFontWeight = FontWeight.Normal
+                var homeTeamFontColor = Color.Unspecified
+
+                if (winningTeam.lowercase() == "home" && score.status is GameStatus.Completed) {
+                    homeTeamFontWeight = FontWeight.Bold
+                    homeTeamFontColor =
+                        if (isSystemInDarkTheme()) MaterialTheme.colorScheme.tertiaryContainer else Color.Unspecified
+                }
 
                 score.homeTeam.drawableResId?.let { resId ->
                     Image(
@@ -111,15 +119,21 @@ fun ScoreItem(
                 Text(
                     text = stringResource(score.homeTeam.teamNameResId),
                     modifier = Modifier.padding(start = 4.dp),
-                    fontWeight = fontWeight
+                    fontWeight = homeTeamFontWeight,
+                    color = homeTeamFontColor
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = score.homeTeamScore?.toString() ?: "", fontWeight = fontWeight)
+                Text(
+                    text = score.homeTeamScore?.toString() ?: "",
+                    fontWeight = homeTeamFontWeight,
+                    color = homeTeamFontColor
+                )
 
                 if (winningTeam.lowercase() == "home" && score.status is GameStatus.Completed) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_left_24),
-                        contentDescription = stringResource(R.string.arrow_left)
+                        contentDescription = stringResource(R.string.arrow_left),
+                        tint = homeTeamFontColor
                     )
                 } else {
                     Spacer(modifier = Modifier.width(24.dp))
@@ -173,16 +187,15 @@ fun ScoreItem(
                 }
             }
 
-            val statusFontWeight = if (score.status is GameStatus.Completed) {
-                FontWeight.Bold
-            } else {
-                FontWeight.Normal
-            }
+            var statusFontWeight = FontWeight.Normal
+            var statusFontColor = Color.Unspecified
 
-            val statusFontColor = if (score.status is GameStatus.Live) {
-                Color.Red
-            } else {
-                Color.Unspecified
+            if (score.status is GameStatus.Completed) {
+                statusFontWeight = FontWeight.Bold
+                statusFontColor =
+                    if (isSystemInDarkTheme()) MaterialTheme.colorScheme.tertiaryContainer else Color.Unspecified
+            } else if (score.status is GameStatus.Live) {
+                statusFontColor = Color.Red
             }
 
             Box(
