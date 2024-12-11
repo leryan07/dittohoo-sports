@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -30,6 +31,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -42,7 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -122,7 +124,8 @@ fun ScoresScreen(
                         Text(text = stringResource(R.string.nba), fontWeight = FontWeight.Bold)
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
             }
@@ -138,14 +141,14 @@ fun ScoresScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(R.color.off_white))
+                    .background(MaterialTheme.colorScheme.surfaceBright)
                     .consumeWindowInsets(innerPadding)
             ) {
                 item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.White)
+                            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                             .padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -155,7 +158,8 @@ fun ScoresScreen(
                             Icon(
                                 painter = painterResource(R.drawable.baseline_chevron_left_24),
                                 contentDescription = stringResource(R.string.chevron_left_content_description),
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                         Spacer(modifier = Modifier.weight(1f))
@@ -182,7 +186,8 @@ fun ScoresScreen(
                             Icon(
                                 painter = painterResource(R.drawable.baseline_chevron_right_24),
                                 contentDescription = stringResource(R.string.chevron_right_content_description),
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
@@ -213,16 +218,33 @@ private fun LazyListScope.scoresSuccessItem(
     scores: List<Score>
 ) {
     itemsIndexed(scores) { index, score ->
-        Column(modifier = Modifier.background(Color.White)) {
-            ScoreItem(
-                score,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
+        val roundedCornerShape = if (scores.size == 1) {
+            RoundedCornerShape(30.dp)
+        } else if (index == 0) {
+            RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+        } else if (index == scores.lastIndex) {
+            RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)
+        } else {
+            RoundedCornerShape(0.dp)
+        }
 
-            if (index < scores.lastIndex) {
-                HorizontalDivider()
+        Row(
+            modifier = Modifier.clip(shape = roundedCornerShape)
+        ) {
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+            ) {
+                ScoreItem(
+                    score,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+
+                if (index < scores.lastIndex) {
+                    HorizontalDivider()
+                }
             }
         }
     }
