@@ -1,1 +1,1 @@
-# sports-scores-android
+# dittohoo-sports
