@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Sports Scores Android"
+rootProject.name = "Dittohoo Sports"
 include(":app")
