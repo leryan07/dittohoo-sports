@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "dev.ryanle.sportsscoresandroid"
+    namespace = "com.areazeroseven.dittohoosports"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "dev.ryanle.sportsscoresandroid"
+        applicationId = "com.areazeroseven.dittohoosports"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
