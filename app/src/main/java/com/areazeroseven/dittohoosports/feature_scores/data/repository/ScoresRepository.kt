@@ -7,7 +7,6 @@ import com.areazeroseven.dittohoosports.feature_scores.domain.repository.IScores
 import com.areazeroseven.dittohoosports.util.DateUtil
 import com.areazeroseven.dittohoosports.util.Result
 import retrofit2.HttpException
-import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject

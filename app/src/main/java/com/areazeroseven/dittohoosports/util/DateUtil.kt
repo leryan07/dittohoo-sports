@@ -5,8 +5,6 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 object DateUtil {
-
-    const val NEW_YORK_TIME_ZONE_ID = "America/New_York"
     const val DATE_TIME_FORMAT_EEE_MMM_d = "EEE, MMM d"
     const val DATE_TIME_FORMAT_EEE_MMdd = "EEE, MM/dd"
     const val DATE_TIME_FORMAT_hmm_a = "h:mm a"

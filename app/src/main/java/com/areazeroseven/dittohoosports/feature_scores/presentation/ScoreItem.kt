@@ -1,7 +1,6 @@
 package com.areazeroseven.dittohoosports.feature_scores.presentation
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -41,9 +40,9 @@ fun ScoreItem(
     var status: String
     var statusFontWeight: FontWeight
     var statusFontColor: Color
-    var teamFontColor = MaterialTheme.colorScheme.onSurface
+    val teamFontColor = MaterialTheme.colorScheme.onSurface
 
-    var winningTeam = if (matchup.homeTeamScore > matchup.awayTeamScore) {
+    val winningTeam = if (matchup.homeTeamScore > matchup.awayTeamScore) {
         "home"
     } else if (matchup.homeTeamScore < matchup.awayTeamScore) {
         "away"
