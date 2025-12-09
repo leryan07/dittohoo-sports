@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="off_white">#F0F1F2</color>  <!-- cool undertone, softer than pure black -->
-    <color name="smoky_gray">#222529</color>
+    <color name="off_white">#F0F1F2</color>
+    <color name="live_game_status_red_light">#B91F37</color>
+    <color name="live_game_status_red_dark">#E9717A</color>
 </resources>
