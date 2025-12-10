@@ -1,6 +1,6 @@
 package com.areazeroseven.dittohoosports.di
 
-import com.areazeroseven.dittohoosports.feature_scores.data.remote.IScoresApi
+import com.areazeroseven.dittohoosports.matchups.data.remote.IScoresApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module

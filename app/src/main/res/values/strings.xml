@@ -39,6 +39,7 @@
     <string name="jazz">Jazz</string>
     <string name="unknown">Unknown</string>
     <string name="arrow_left">Arrow Left</string>
+    <string name="arrow_back">Arrow Back</string>
     <string name="today_game_date_time">Today %1$s</string>
     <string name="tomorrow_game_date_time">Tomorrow\n%1$s</string>
     <string name="scores_error">An error occurred fetching scores. Please try again.</string>
