@@ -4,8 +4,8 @@ import com.areazeroseven.dittohoosports.matchups.domain.Matchup
 import com.areazeroseven.dittohoosports.util.Result
 import java.time.LocalDate
 
-interface IScoresRepository {
-    suspend fun getNBAScores(
+interface IMatchupsRepository {
+    suspend fun getNBAMatchups(
         date: LocalDate
     ): Result<List<Matchup>>
 }

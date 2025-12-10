@@ -25,7 +25,7 @@ import com.areazeroseven.dittohoosports.util.DateUtil.DATE_TIME_FORMAT_hmm_a
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ScoreItem(
+fun MatchupRow(
     matchup: Matchup,
     modifier: Modifier = Modifier
 ) {

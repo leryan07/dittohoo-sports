@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.areazeroseven.dittohoosports.matchups.domain.repository.IScoresRepository
+import com.areazeroseven.dittohoosports.matchups.domain.repository.IMatchupsRepository
 import com.areazeroseven.dittohoosports.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MatchupsViewModel @Inject constructor(
-    private val repository: IScoresRepository
+    private val matchupsRepository: IMatchupsRepository
 ) : ViewModel() {
 
     var state: MatchupsState by mutableStateOf(
@@ -62,7 +62,7 @@ class MatchupsViewModel @Inject constructor(
                 isRefreshing = isRefresh
             )
 
-            val result = repository.getNBAScores(
+            val result = matchupsRepository.getNBAMatchups(
                 date.toLocalDate()
             )
 

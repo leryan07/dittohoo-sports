@@ -31,7 +31,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ScoresDatePicker(
+fun MatchupsDatePicker(
     date: LocalDateTime,
     onPreviousDay: () -> Unit,
     onNextDay: () -> Unit,

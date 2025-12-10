@@ -4,7 +4,7 @@ import com.areazeroseven.dittohoosports.matchups.data.remote.dto.ScoreboardDataD
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface IScoresApi {
+interface IEspnApi {
 
     @GET("basketball/nba/scoreboard")
     suspend fun getNBAScores(

@@ -1,9 +1,9 @@
 package com.areazeroseven.dittohoosports.matchups.data.repository
 
 import com.areazeroseven.dittohoosports.matchups.data.mappers.toNBAMatchup
-import com.areazeroseven.dittohoosports.matchups.data.remote.IScoresApi
+import com.areazeroseven.dittohoosports.matchups.data.remote.IEspnApi
 import com.areazeroseven.dittohoosports.matchups.domain.Matchup
-import com.areazeroseven.dittohoosports.matchups.domain.repository.IScoresRepository
+import com.areazeroseven.dittohoosports.matchups.domain.repository.IMatchupsRepository
 import com.areazeroseven.dittohoosports.util.DateUtil
 import com.areazeroseven.dittohoosports.util.Result
 import retrofit2.HttpException
@@ -11,11 +11,11 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class ScoresRepository @Inject constructor(
-    private val scoresApi: IScoresApi
-) : IScoresRepository {
+class MatchupsRepository @Inject constructor(
+    private val scoresApi: IEspnApi
+) : IMatchupsRepository {
 
-    override suspend fun getNBAScores(
+    override suspend fun getNBAMatchups(
         date: LocalDate
     ): Result<List<Matchup>> {
         return try {

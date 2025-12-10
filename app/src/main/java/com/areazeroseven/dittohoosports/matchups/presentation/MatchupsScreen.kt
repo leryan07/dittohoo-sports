@@ -32,8 +32,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.areazeroseven.dittohoosports.R
 import com.areazeroseven.dittohoosports.matchups.domain.Matchup
 import com.areazeroseven.dittohoosports.matchups.presentation.components.ErrorBanner
-import com.areazeroseven.dittohoosports.matchups.presentation.components.ScoreItem
-import com.areazeroseven.dittohoosports.matchups.presentation.components.ScoresDatePicker
+import com.areazeroseven.dittohoosports.matchups.presentation.components.MatchupRow
+import com.areazeroseven.dittohoosports.matchups.presentation.components.MatchupsDatePicker
 import horizontalGradientBorder
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,7 +81,7 @@ fun ScoresScreen(
                     .fillMaxSize()
             ) {
                 item {
-                    ScoresDatePicker(
+                    MatchupsDatePicker(
                         state.date,
                         viewModel::fetchPreviousDay,
                         onNextDay = viewModel::fetchNextDay,
@@ -131,7 +131,7 @@ private fun MatchupsList(
             val horizontalPadding = 16.dp
 
             Column {
-                ScoreItem(
+                MatchupRow(
                     score,
                     modifier = Modifier
                         .fillMaxWidth()
