@@ -1,4 +1,4 @@
-package com.areazeroseven.dittohoosports.matchups.presentation.components
+package com.areazeroseven.dittohoosports.core.presentation.components
 
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
