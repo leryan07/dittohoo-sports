@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 data object MatchupsList : NavKey
 
 @Serializable
-data class MatchupDetails(val id: String) : NavKey
+data class MatchupDetails(val id: String, val date: String) : NavKey
 
 @Composable
 fun DittohooSportsNav() {
@@ -26,14 +26,15 @@ fun DittohooSportsNav() {
         entryProvider = entryProvider {
             entry<MatchupsList> {
                 ScoresScreen(
-                    { id ->
-                        backStack.add(MatchupDetails(id))
+                    { id, date ->
+                        backStack.add(MatchupDetails(id, date))
                     }
                 )
             }
             entry<MatchupDetails> { key ->
                 MatchupDetailsScreen(
                     id = key.id,
+                    date = key.date,
                     onBack = {
                         backStack.removeLastOrNull()
                     }

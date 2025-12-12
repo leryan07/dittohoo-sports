@@ -35,11 +35,12 @@ import com.areazeroseven.dittohoosports.matchups.presentation.components.ErrorBa
 import com.areazeroseven.dittohoosports.matchups.presentation.components.MatchupRow
 import com.areazeroseven.dittohoosports.matchups.presentation.components.MatchupsDatePicker
 import horizontalGradientBorder
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScoresScreen(
-    onMatchupClick: (String) -> Unit,
+    onMatchupClick: (String, String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MatchupsViewModel = viewModel()
 ) {
@@ -96,6 +97,7 @@ fun ScoresScreen(
                             Spacer(modifier = Modifier.height(24.dp))
                             MatchupsList(
                                 state.list,
+                                state.date,
                                 onMatchupClick,
                                 commonSurfaceColor
                             )
@@ -115,7 +117,8 @@ fun ScoresScreen(
 @Composable
 private fun MatchupsList(
     matchups: List<Matchup>,
-    onNavigateToMatchupDetails: (String) -> Unit,
+    matchupsDate: LocalDateTime,
+    onNavigateToMatchupDetails: (String, String) -> Unit,
     backgroundColor: Color
 ) {
     Column(
@@ -125,14 +128,14 @@ private fun MatchupsList(
             )
             .background(backgroundColor)
     ) {
-        matchups.forEachIndexed { index, score ->
+        matchups.forEachIndexed { index, matchup ->
             val topPadding = if (index == 0) 24.dp else 16.dp
             val bottomPadding = if (index == matchups.lastIndex) 24.dp else 16.dp
             val horizontalPadding = 16.dp
 
             Column {
                 MatchupRow(
-                    score,
+                    matchup,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
@@ -143,7 +146,12 @@ private fun MatchupsList(
                         )
                         .clickable(
                             enabled = true,
-                            onClick = { onNavigateToMatchupDetails("testId") }
+                            onClick = {
+                                onNavigateToMatchupDetails(
+                                    matchup.id,
+                                    matchupsDate.toLocalDate().toString()
+                                )
+                            }
                         )
                 )
 
