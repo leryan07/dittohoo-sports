@@ -1,8 +1,10 @@
 package com.areazeroseven.dittohoosports.matchups.data.repository
 
 import com.areazeroseven.dittohoosports.matchups.data.mappers.toNBAMatchup
+import com.areazeroseven.dittohoosports.matchups.data.mappers.toNBAMatchupDetails
 import com.areazeroseven.dittohoosports.matchups.data.remote.IEspnApi
 import com.areazeroseven.dittohoosports.matchups.domain.Matchup
+import com.areazeroseven.dittohoosports.matchups.domain.MatchupDetails
 import com.areazeroseven.dittohoosports.matchups.domain.repository.IMatchupsRepository
 import com.areazeroseven.dittohoosports.util.DateUtil
 import com.areazeroseven.dittohoosports.util.Result
@@ -25,6 +27,21 @@ class MatchupsRepository @Inject constructor(
             val data = scoresApi.getNBAScores(
                 formattedDate
             ).toNBAMatchup()
+
+            Result.Success(data)
+        } catch (e: HttpException) {
+            e.printStackTrace()
+            Result.Error(
+                e.message ?: "An unknown error occurred.",
+                e.code()
+            )
+        }
+    }
+
+    override suspend fun getNBAEventSummary(eventId: String): Result<MatchupDetails> {
+        return try {
+            val data = scoresApi.getNBAEventSummary(eventId)
+                .toNBAMatchupDetails()
 
             Result.Success(data)
         } catch (e: HttpException) {

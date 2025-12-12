@@ -1,12 +1,12 @@
 package com.areazeroseven.dittohoosports.matchups.data.remote.dto
 
-data class EventStatusDto(
+data class EventStatusDTO(
     val displayClock: String,
     val period: Int,
-    val type: StatusTypeDto
+    val type: StatusTypeDTO
 )
 
-data class StatusTypeDto(
+data class StatusTypeDTO(
     val name: String,
     val state: String,
     val completed: Boolean,
