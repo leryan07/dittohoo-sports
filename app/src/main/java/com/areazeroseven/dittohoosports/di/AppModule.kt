@@ -1,6 +1,6 @@
 package com.areazeroseven.dittohoosports.di
 
-import com.areazeroseven.dittohoosports.feature_scores.data.remote.IScoresApi
+import com.areazeroseven.dittohoosports.core.data.remote.IEspnApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -18,7 +18,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesScoresApi(moshi: Moshi): IScoresApi {
+    fun providesEspnApi(moshi: Moshi): IEspnApi {
         return Retrofit.Builder()
             .baseUrl("https://site.api.espn.com/apis/site/v2/sports/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
