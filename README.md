@@ -5,7 +5,7 @@ This is a demo app that is used to showcase my skills in native Android developm
 ## Upcoming/Planned Changes
 - Add more sports (NFL, MLB, etc.)
 - Continue work on the styling/theming
-- Add matchup details screen
+- Continue updating matchup details
 
 ### Scores Overview Current Day
 <img width="223" height="500" alt="scores_overview_current_day_light" src="https://github.com/user-attachments/assets/3bff5f49-d999-4a10-b894-f9d4d1793540" />
