@@ -17,6 +17,7 @@ retrofit = "2.11.0"
 nav3Core = "1.0.0"
 kotlinSerialization = "2.1.21"
 material3 = "1.4.0"
+mockk = "1.14.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +45,10 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 # Core Navigation 3 libraries
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+
+# Testing libraries
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
