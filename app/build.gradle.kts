@@ -59,6 +59,7 @@ dependencies {
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+    testImplementation(libs.coroutines.test)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -69,6 +70,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
+
+    // Mockk
+    testImplementation(libs.mockk)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
