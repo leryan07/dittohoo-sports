@@ -2,6 +2,7 @@
 agp = "8.13.1"
 converterMoshi = "2.11.0"
 hiltAndroid = "2.57.2"
+hiltNavigationCompose = "1.3.0"
 kotlin = "2.0.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -18,9 +19,11 @@ nav3Core = "1.0.0"
 kotlinSerialization = "2.1.21"
 material3 = "1.4.0"
 mockk = "1.14.7"
+nav3-lifecycle-viewmodel = "2.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
@@ -45,6 +48,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 # Core Navigation 3 libraries
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-navigation3-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3-lifecycle-viewmodel" }
 
 # Testing libraries
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }

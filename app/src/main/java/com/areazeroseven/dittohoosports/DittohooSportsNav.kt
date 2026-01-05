@@ -1,9 +1,14 @@
 package com.areazeroseven.dittohoosports
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.areazeroseven.dittohoosports.matchups.presentation.ScoresScreen
 import com.areazeroseven.dittohoosports.matchups.presentation.matchup_details.MatchupDetailsScreen
@@ -22,6 +27,10 @@ fun DittohooSportsNav() {
 
     NavDisplay(
         backStack = backStack,
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator()
+        ),
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             entry<MatchupsList> {
@@ -40,6 +49,14 @@ fun DittohooSportsNav() {
                     }
                 )
             }
-        }
+        },
+        transitionSpec = {
+            slideInHorizontally(initialOffsetX = { it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { -it })
+        },
+        popTransitionSpec = {
+            slideInHorizontally(initialOffsetX = { -it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { it })
+        },
     )
 }

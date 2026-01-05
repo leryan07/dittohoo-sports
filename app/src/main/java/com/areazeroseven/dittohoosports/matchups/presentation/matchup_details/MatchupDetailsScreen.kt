@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.areazeroseven.dittohoosports.R
 import com.areazeroseven.dittohoosports.core.presentation.components.DevelopmentInProgress
 import com.areazeroseven.dittohoosports.matchups.presentation.matchup_details.components.MatchupDetailsHeaderRow
@@ -30,7 +30,7 @@ fun MatchupDetailsScreen(
     date: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MatchupDetailsViewModel = viewModel()
+    viewModel: MatchupDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
 
