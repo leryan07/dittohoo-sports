@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import clipRoundedCornerShape_25_dp
 import com.areazeroseven.dittohoosports.R
 import com.areazeroseven.dittohoosports.matchups.domain.Matchup
@@ -41,7 +41,7 @@ import java.time.LocalDateTime
 fun ScoresScreen(
     onMatchupClick: (String, String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MatchupsViewModel = viewModel()
+    viewModel: MatchupsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
     val commonSurfaceColor = colorScheme.surface
@@ -91,14 +91,14 @@ fun ScoresScreen(
                 }
 
                 if (!state.isLoading) {
-                    state.list?.let { scores ->
+                    state.list?.let { matchups ->
                         item {
                             Spacer(modifier = Modifier.height(24.dp))
                             MatchupsList(
-                                state.list,
-                                state.date,
-                                onMatchupClick,
-                                commonSurfaceColor
+                                matchups = matchups,
+                                matchupsDate = state.date,
+                                onNavigateToMatchupDetails = onMatchupClick,
+                                backgroundColor = commonSurfaceColor
                             )
                             Spacer(modifier = Modifier.height(24.dp))
                         }
