@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
-@HiltViewModel()
+@HiltViewModel
 class MatchupDetailsViewModel @Inject constructor(
     private val matchupsRepository: IMatchupsRepository
 ) : ViewModel() {
